@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Status Koneksi TikTok | Content Center Wuling</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="draft">DRAF: halaman ini menunggu persetujuan PT SGMW Motor Indonesia sebelum digunakan secara resmi.</div>
+<header><div class="wrap bar">
+  <a class="brand" href="./">Content Center Wuling</a>
+  <nav class="links" aria-label="Navigasi utama">
+    <a href="./">Beranda</a>
+    <a href="syarat-ketentuan.html">Syarat dan Ketentuan</a>
+    <a href="kebijakan-privasi.html">Kebijakan Privasi</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <h1 id="title">Memproses koneksi TikTok...</h1>
+  <p id="msg" class="lead"></p>
+  <div id="sandbox" class="card" hidden>
+    <b>Mode uji (sandbox).</b> Salin kode di bawah ke skrip penukaran token di komputer Anda dalam beberapa menit. Jangan kirim kode ini lewat chat atau email.
+    <p><code id="code" style="word-break:break-all"></code></p>
+    <p class="meta">state: <code id="state"></code></p>
+  </div>
+  <p><a href="./">Kembali ke beranda</a></p>
+</main>
+
+<footer><div class="wrap">
+  <div class="links"><a href="syarat-ketentuan.html">Syarat dan Ketentuan</a><a href="kebijakan-privasi.html">Kebijakan Privasi</a></div>
+  Content Center Wuling adalah program PT SGMW Motor Indonesia. Layanan ini tidak berafiliasi dengan, disponsori, atau didukung oleh TikTok.
+</div></footer>
+
+<script>
+(function () {
+  // Sandbox only: shows the one-time authorization code so it can be exchanged
+  // server-side with a local script. Set to false before production.
+  var SANDBOX = true;
+  var q = new URLSearchParams(window.location.search);
+  var t = document.getElementById('title'), m = document.getElementById('msg');
+  if (q.get('error')) {
+    t.textContent = 'Koneksi dibatalkan atau gagal';
+    m.textContent = 'TikTok mengembalikan: ' + (q.get('error_description') || q.get('error')) + '. Silakan coba lagi dari beranda.';
+  } else if (q.get('code')) {
+    t.textContent = 'Akun TikTok berhasil dihubungkan';
+    m.textContent = 'Terima kasih. Izin dapat dicabut kapan saja dari aplikasi TikTok.';
+    if (SANDBOX) {
+      document.getElementById('code').textContent = q.get('code');
+      document.getElementById('state').textContent = q.get('state') || '-';
+      document.getElementById('sandbox').hidden = false;
+    }
+  } else {
+    t.textContent = 'Tidak ada data otorisasi';
+    m.textContent = 'Halaman ini digunakan TikTok setelah proses login. Mulai dari beranda untuk menghubungkan akun.';
+  }
+  // Remove the code from the address bar so it is not kept in browser history.
+  if (window.history && history.replaceState) history.replaceState(null, "", window.location.pathname);
+})();
+</script>
+</body>
+</html>
