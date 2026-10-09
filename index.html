@@ -21,7 +21,7 @@
 
 <main class="wrap">
   <h1>Laporan performa TikTok untuk dealer Wuling</h1>
-  <p class="lead">Content Center Wuling adalah program pengembangan kapabilitas digital dealer Wuling di Indonesia. Layanan ini membantu dealer melihat perkembangan akun TikTok resminya (followers, likes, dan performa video publik) dalam satu laporan, hanya setelah pemilik akun memberikan izin melalui login resmi TikTok.</p>
+  <p class="lead">Content Center Wuling adalah program pengembangan kapabilitas digital dealer Wuling di Indonesia. Layanan ini membantu dealer melihat perkembangan akun TikTok resminya (followers, jangkauan, waktu tonton, dan performa postingan publik) dalam satu laporan, hanya setelah pemilik akun memberikan izin melalui login resmi TikTok.</p>
 
   <h2>Untuk siapa</h2>
   <p>Dealer dan outlet resmi Wuling yang mengikuti program Content Center, melalui PIC (person in charge) yang ditunjuk dealer dan memegang akses akun TikTok dealer.</p>
@@ -30,21 +30,48 @@
   <ol class="steps">
     <li><b>Hubungkan akun.</b> PIC menekan tombol "Hubungkan TikTok" dan login di halaman resmi TikTok. Kata sandi dimasukkan langsung di TikTok, tidak pernah kami terima.</li>
     <li><b>Berikan izin.</b> TikTok menampilkan daftar izin. Anda memilih untuk menyetujui atau membatalkan.</li>
-    <li><b>Laporan berkala.</b> Kami membaca statistik akun dan daftar video publik secara berkala, lalu menyusun laporan performa untuk dealer dan program.</li>
+    <li><b>Laporan berkala.</b> Kami membaca statistik akun, statistik postingan publik, dan ringkasan audiens secara berkala, lalu menyusun laporan performa untuk dealer dan program.</li>
     <li><b>Kendali tetap di Anda.</b> Izin dapat dicabut kapan saja dari aplikasi TikTok. Setelah dicabut, kami berhenti mengambil data.</li>
   </ol>
 
   <h2>Data yang dibaca</h2>
   <div class="tablewrap"><table>
     <tr><th>Izin TikTok</th><th>Data</th></tr>
-    <tr><td>user.info.basic</td><td>ID pengguna unik untuk aplikasi ini, nama tampilan, foto profil</td></tr>
+    <tr><td>user.info.basic, user.info.username</td><td>ID akun untuk aplikasi ini, nama tampilan, foto profil, username</td></tr>
     <tr><td>user.info.stats</td><td>Jumlah followers, following, total likes, jumlah video</td></tr>
-    <tr><td>video.list</td><td>Daftar video publik: waktu unggah, deskripsi, tautan, durasi, jumlah tayangan, likes, komentar, dan bagikan</td></tr>
+    <tr><td>user.insights</td><td>Statistik harian akun: penambahan dan pengurangan followers, tayangan video, kunjungan profil, likes, komentar, bagikan, serta ringkasan audiens (usia, gender, negara, kota, jam aktif) dalam bentuk persentase</td></tr>
+    <tr><td>video.list</td><td>Daftar postingan publik: waktu unggah, caption, tautan, durasi, tayangan, likes, komentar, bagikan, favorit</td></tr>
+    <tr><td>video.insights</td><td>Kinerja tiap postingan: jangkauan, total dan rata-rata waktu tonton, persentase ditonton sampai habis, followers baru, kunjungan profil, sumber trafik, serta ringkasan audiens dalam bentuk persentase</td></tr>
   </table></div>
-  <div class="card"><b>Yang tidak kami lakukan:</b> memposting konten, mengubah profil, membaca pesan langsung (DM), mengakses video pribadi, atau menyimpan kata sandi Anda.</div>
+  <div class="card"><b>Yang tidak kami lakukan:</b> memposting konten, mengubah profil, membaca pesan langsung (DM), mengakses video pribadi, menyimpan kata sandi Anda, atau melihat identitas penonton atau followers secara perorangan. Data audiens hanya berupa persentase agregat dari TikTok.</div>
 
   <h2>Hubungkan akun TikTok dealer</h2>
-  <p><a class="btn" href="#" aria-disabled="true" title="Segera tersedia">Hubungkan TikTok (segera tersedia)</a></p>
+  <form id="connect" class="card" onsubmit="return ccwConnect(event)">
+    <label for="dealer"><b>Kode dealer</b> (dari tim Content Center)</label><br>
+    <input id="dealer" name="dealer" required pattern="[A-Za-z0-9_-]{2,32}" autocomplete="off" style="margin:8px 0;padding:10px;font-size:16px;width:100%;max-width:280px;border:1px solid #c9d1e0;border-radius:6px">
+    <br><button id="connectBtn" class="btn" type="submit">Hubungkan TikTok</button>
+    <p id="connectNote" class="meta" style="margin:10px 0 0"></p>
+  </form>
+  <script>
+    // Set to the sign-in server URL after it is deployed, e.g. "https://ccw-tiktok.example.workers.dev"
+    var WORKER_URL = "";
+    (function () {
+      var p = new URLSearchParams(location.search).get('dealer');
+      if (p) document.getElementById('dealer').value = p;
+      if (!WORKER_URL) {
+        var b = document.getElementById('connectBtn');
+        b.setAttribute('aria-disabled', 'true'); b.disabled = true; b.textContent = 'Hubungkan TikTok (segera tersedia)';
+        document.getElementById('connectNote').textContent = 'Layanan sedang disiapkan. Tautan akan dikirim oleh tim Content Center.';
+      }
+    })();
+    function ccwConnect(e) {
+      e.preventDefault();
+      if (!WORKER_URL) return false;
+      var d = document.getElementById('dealer').value.trim();
+      location.href = WORKER_URL.replace(/\/$/, '') + '/connect?dealer=' + encodeURIComponent(d);
+      return false;
+    }
+  </script>
   <p class="meta">Dengan menghubungkan akun, Anda menyetujui <a href="syarat-ketentuan.html">Syarat dan Ketentuan</a> dan <a href="kebijakan-privasi.html">Kebijakan Privasi</a>.</p>
 
   <h2>Kontak</h2>

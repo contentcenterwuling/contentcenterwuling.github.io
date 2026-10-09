@@ -42,7 +42,22 @@
   var SANDBOX = true;
   var q = new URLSearchParams(window.location.search);
   var t = document.getElementById('title'), m = document.getElementById('msg');
-  if (q.get('error')) {
+  var REASONS = {
+    sesi_kedaluwarsa: 'Sesi sudah kedaluwarsa (lebih dari 15 menit). Silakan mulai lagi dari beranda.',
+    kode_dealer_tidak_valid: 'Kode dealer tidak valid. Periksa kembali tautan dari tim Content Center.',
+    access_denied: 'Anda membatalkan izin di TikTok. Akun belum terhubung.',
+    invalid_grant: 'Kode otorisasi sudah tidak berlaku. Silakan mulai lagi dari beranda.'
+  };
+  if (q.get('status') === 'ok') {
+    t.textContent = 'Akun TikTok berhasil dihubungkan';
+    m.textContent = 'Terima kasih. Izin dapat dicabut kapan saja dari aplikasi TikTok.';
+  } else if (q.get('status') === 'partial') {
+    t.textContent = 'Akun terhubung, tetapi sebagian izin tidak diberikan';
+    m.textContent = 'Agar laporan lengkap, hubungkan ulang dan aktifkan semua izin pada layar TikTok.';
+  } else if (q.get('status') === 'error') {
+    t.textContent = 'Koneksi belum berhasil';
+    m.textContent = REASONS[q.get('reason')] || ('Terjadi kendala (' + (q.get('reason') || 'tidak diketahui') + '). Silakan coba lagi dari beranda.');
+  } else if (q.get('error')) {
     t.textContent = 'Koneksi dibatalkan atau gagal';
     m.textContent = 'TikTok mengembalikan: ' + (q.get('error_description') || q.get('error')) + '. Silakan coba lagi dari beranda.';
   } else if (q.get('code')) {
